@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance - Medical Service Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #16146e;
+            color: #d3d9dd;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 80%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .ambulance-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ambulance-list li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .ambulance-list h3 {
+            margin-top: 0;
+        }
+
+        .form-container {
+            margin-top: 20px;
+        }
+
+        .form-container input, .form-container textarea, .form-container button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        .form-container input, .form-container textarea {
+            border: 1px solid #ccc;
+            width: calc(100% - 22px);
+        }
+
+        .form-container button {
+            border: none;
+            background-color: #16146e;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0e0e5a;
+        }
+
+        footer {
+            background-color: #121e4c;
+            color: #2392a1;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="ambulance-list">
+            <h1>Ambulance Services</h1>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search for ambulances...">
+            </div>
+            <ul class="ambulance-list" id="ambulanceList">
+                <!-- Example ambulance entries -->
+                <li>
+                    <h3>Ambulance Service A</h3>
+                    <p>Location: Central City</p>
+                    <p>Contact: (123) 456-7890</p>
+                    <p>Available: Yes</p>
+                </li>
+                <li>
+                    <h3>Ambulance Service B</h3>
+                    <p>Location: North District</p>
+                    <p>Contact: (987) 654-3210</p>
+                    <p>Available: No</p>
+                </li>
+                <li>
+                    <h3>Ambulance Service C</h3>
+                    <p>Location: South Town</p>
+                    <p>Contact: (555) 123-4567</p>
+                    <p>Available: Yes</p>
+                </li>
+            </ul>
+        </section>
+
+        <section id="request-ambulance">
+            <h2>Request an Ambulance</h2>
+            <div class="form-container">
+                <form id="requestAmbulanceForm">
+                    <input type="text" id="requestLocation" name="location" placeholder="Pickup Location" required>
+                    <input type="text" id="requestContact" name="contact" placeholder="Contact Number" required>
+                    <textarea id="requestDetails" name="details" placeholder="Details of the Situation" required></textarea>
+                    <button type="submit">Request Ambulance</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Medical Service Portal. All Rights Reserved.</p>
+    </footer>
+    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>

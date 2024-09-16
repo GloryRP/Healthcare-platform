@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organ Donor Form</title>
+    <style>
+        /* General form styling */
+        form {
+            width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: hsl(120, 50%, 87%);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 128, 0, 0.1);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        /* Form heading */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2a7020;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            background-color: rgb(200, 255, 200);
+            text-decoration: underline;
+        }
+
+        /* Label styling */
+        form label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+            color: #09098b;
+        }
+
+        /* Input fields styling */
+        form input[type="text"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Submit button styling */
+        form input[type="submit"] {
+            background-color: #2a7020;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        /* Hover effect for submit button */
+        form input[type="submit"]:hover {
+            background-color: #2a5720;
+        }
+
+        /* Focus effect for input fields */
+        form input[type="text"]:focus {
+            border-color: #2a7020;
+        }
+
+        /* Styling error messages or instructions */
+        form p {
+            font-size: 12px;
+            color: red;
+            text-align: center;
+        }
+
+        /* Responsive form on smaller screens */
+        @media screen and (max-width: 500px) {
+            form {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Organ Donor Registration</h1>
+    <form id="organDonorForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="organType">Organ Type:</label>
+        <input type="text" id="organType" name="organType" required><br><br>
+
+        <label for="contactNumber">Contact Number:</label>
+        <input type="text" id="contactNumber" name="contactNumber" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+    document.getElementById('organDonorForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        // Get form data
+        const name = document.getElementById('name').value;
+        const organType = document.getElementById('organType').value;
+        const contactNumber = document.getElementById('contactNumber').value;
+        const location = document.getElementById('location').value;
+
+        // Create a data object
+        const donorData = {
+            name: name,
+            organType: organType,
+            contactNumber: contactNumber,
+            location: location
+        };
+
+        try {
+            // Send data to the backend
+            const response = await fetch('http://localhost:3000/api/organDonors', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(donorData) // Convert object to JSON string
+            });
+
+            // Handle response
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Organ donor added:', result);
+                alert('Organ donor added successfully!');
+            } else {
+                console.error('Error:', response.statusText);
+                alert('Failed to add donor.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients - Medical Service Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #16146e;
+            color: #d3d9dd;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 80%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .patient-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .patient-list li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .patient-list h3 {
+            margin-top: 0;
+        }
+
+        .form-container {
+            margin-top: 20px;
+        }
+
+        .form-container input, .form-container button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        .form-container input {
+            border: 1px solid #ccc;
+            width: calc(100% - 22px);
+        }
+
+        .form-container button {
+            border: none;
+            background-color: #16146e;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0e0e5a;
+        }
+
+        footer {
+            background-color: #121e4c;
+            color: #2392a1;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="patient-search">
+            <h1>Patients</h1>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search for patients...">
+            </div>
+            <ul class="patient-list" id="patientList">
+                <!-- Example patient entries -->
+                <li>
+                    <h3>John Doe</h3>
+                    <p>Age: 45</p>
+                    <p>Condition: Diabetes</p>
+                    <p>Contact: (123) 456-7890</p>
+                </li>
+                <li>
+                    <h3>Jane Smith</h3>
+                    <p>Age: 34</p>
+                    <p>Condition: Hypertension</p>
+                    <p>Contact: (987) 654-3210</p>
+                </li>
+                <li>
+                    <h3>Emily Johnson</h3>
+                    <p>Age: 29</p>
+                    <p>Condition: Asthma</p>
+                    <p>Contact: (555) 123-4567</p>
+                </li>
+            </ul>
+        </section>
+
+        <section id="add-patient">
+            <h2>Add New Patient</h2>
+            <div class="form-container">
+                <form id="addPatientForm">
+                    <input type="text" id="patientName" name="name" placeholder="Patient Name" required>
+                    <input type="number" id="patientAge" name="age" placeholder="Age" required>
+                    <input type="text" id="patientCondition" name="condition" placeholder="Condition" required>
+                    <input type="text" id="patientContact" name="contact" placeholder="Contact Number" required>
+                    <button type="submit">Add Patient</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Medical Service Portal. All Rights Reserved.</p>
+    </footer>
+    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>
