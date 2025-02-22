@@ -21,7 +21,7 @@ Install Node.js
 Install MySQL
 
 Steps to Run Locally
-git clone https://github.com/your-username/healthcare-platform.git
+git clone https://github.com/GloryRP/healthcare-platform.git
 cd healthcare-platform
 npm install
 npm start
@@ -62,4 +62,4 @@ This project is under the MIT License.
 
 Contact
 
-In case of questions, contact Glo (GitHub: your-username).
+In case of questions, contact Glo (GitHub: GloryRP).
