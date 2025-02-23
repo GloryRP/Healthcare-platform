@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Management - Medical Service Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 900px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .doctor-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .edit-btn {
+            background: #2196F3;
+        }
+
+        .delete-btn {
+            background: #f44336;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Doctor Management</h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Doctor Form (Add/Update) -->
+        <h2>Add/Update Doctor</h2>
+        <form id="doctorForm">
+            <input type="hidden" id="doctorId">
+            <input type="text" id="doctorName" placeholder="Doctor's Name" required>
+            <select id="doctorSpecialization" required>
+                <option value="">Select Specialization</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Orthopedic">Orthopedic</option>
+                <option value="Neurology">Neurology</option>
+                <option value="General">General Physician</option>
+            </select>
+            <input type="date" id="joiningDate" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Doctor List -->
+        <h2>Doctor List</h2>
+        <div id="doctorList">
+            <!-- Doctor entries will be dynamically inserted here -->
+        </div>
+
+    </div>
+
+    <script>
+        const doctorForm = document.getElementById('doctorForm');
+        const doctorList = document.getElementById('doctorList');
+
+        // Fetch doctors from backend
+        async function fetchDoctors() {
+            try {
+                const response = await fetch("http://localhost:3000/api/doctors");
+                const doctors = await response.json();
+
+                doctorList.innerHTML = "";
+                doctors.forEach(doctor => {
+                    const doctorCard = document.createElement("div");
+                    doctorCard.className = "doctor-card";
+                    doctorCard.innerHTML = `
+                        <strong>Name:</strong> ${doctor.name} <br>
+                        <strong>Specialization:</strong> ${doctor.specialization} <br>
+                        <strong>Joining Date:</strong> ${doctor.joining_date} <br>
+                        <button class="edit-btn" onclick="editDoctor(${doctor.id}, '${doctor.name}', '${doctor.specialization}', '${doctor.joining_date}')">✏️ Edit</button>
+                        <button class="delete-btn" onclick="deleteDoctor(${doctor.id})">🗑️ Delete</button>
+                    `;
+                    doctorList.appendChild(doctorCard);
+                });
+            } catch (error) {
+                console.error("Error fetching doctors:", error);
+            }
+        }
+
+        // Add or Update Doctor
+        doctorForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const doctorId = document.getElementById('doctorId').value;
+            const doctorName = document.getElementById('doctorName').value;
+            const doctorSpecialization = document.getElementById('doctorSpecialization').value;
+            const joiningDate = document.getElementById('joiningDate').value;
+
+            const payload = { name: doctorName, specialization: doctorSpecialization, joining_date: joiningDate };
+            const url = doctorId ? `http://localhost:3000/api/doctors/${doctorId}` : "http://localhost:3000/api/doctors";
+            const method = doctorId ? "PUT" : "POST";
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    alert(`✅ Doctor ${doctorId ? 'updated' : 'added'} successfully!`);
+                    doctorForm.reset();
+                    fetchDoctors();
+                } else {
+                    alert("❌ Error processing request.");
+                }
+            } catch (error) {
+                console.error("Error processing doctor form:", error);
+            }
+        });
+
+        // Edit Doctor (Fill Form)
+        function editDoctor(id, name, specialization, joiningDate) {
+            document.getElementById('doctorId').value = id;
+            document.getElementById('doctorName').value = name;
+            document.getElementById('doctorSpecialization').value = specialization;
+            document.getElementById('joiningDate').value = joiningDate;
+        }
+
+        // Delete Doctor
+        async function deleteDoctor(id) {
+            if (!confirm("Are you sure you want to delete this doctor?")) return;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/doctors/${id}`, { method: "DELETE" });
+                if (response.ok) {
+                    alert("🗑️ Doctor deleted successfully!");
+                    fetchDoctors();
+                } else {
+                    alert("❌ Error deleting doctor.");
+                }
+            } catch (error) {
+                console.error("Error deleting doctor:", error);
+            }
+        }
+
+        // Initial load
+        fetchDoctors();
+    </script>
+
+</body>
+
+</html>

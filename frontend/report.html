@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Analysis - Medical Service Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 30px;
+        }
+
+        input[type="file"] {
+            margin: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #output {
+            margin-top: 30px;
+            white-space: pre-wrap; 
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .loader {
+            display: none;
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Medical Report Analysis</h1>
+    </header>
+
+    <div class="container">
+        <p>Upload your medical report (image only) for analysis:</p>
+        <input type="file" id="reportFile" accept=".png, .jpg, .jpeg">
+        <button onclick="analyzeReport()">Analyze Report</button>
+
+        <div id="loader" class="loader">Processing... Please wait.</div>
+
+        <div id="output"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Medical Service Portal. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Medical dictionary for explaining terms
+        const medicalDictionary = {
+            "anemia": "A condition where you lack enough healthy red blood cells to carry oxygen.",
+            "hypertension": "A condition where blood pressure is too high, also known as high blood pressure.",
+            "diabetes": "A disease that affects how your body processes blood sugar (glucose).",
+            "cholesterol": "A fatty substance in your blood. High levels can increase heart disease risk.",
+            "platelets": "Small blood cells that help your body form clots to stop bleeding.",
+            "hemoglobin": "A protein in red blood cells that carries oxygen throughout your body.",
+            "thyroid": "A gland that controls your metabolism and hormone balance.",
+            "glucose": "A type of sugar in your blood. High glucose can indicate diabetes.",
+            "infection": "When bacteria, viruses, or other microbes invade the body and cause illness.",
+            "inflammation": "Your body's response to injury or infection, causing redness and swelling.",
+            "cardiac": "Related to the heart."
+        };
+
+        function analyzeReport() {
+            const fileInput = document.getElementById('reportFile');
+            const loader = document.getElementById('loader');
+            const output = document.getElementById('output');
+
+            if (fileInput.files.length === 0) {
+                alert("Please upload a report file.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const imageData = event.target.result;
+                loader.style.display = 'block';
+                output.innerHTML = '';
+
+                Tesseract.recognize(
+                    imageData,
+                    'eng', 
+                    { logger: m => console.log(m) }
+                ).then(({ data: { text } }) => {
+                    loader.style.display = 'none';
+                    const explainedText = explainMedicalTerms(text);
+                    output.innerHTML = `<h3>Extracted Text:</h3><p>${text}</p><h3>Explanation:</h3><p>${explainedText}</p>`;
+                }).catch(err => {
+                    loader.style.display = 'none';
+                    alert("Error during analysis: " + err.message);
+                });
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function explainMedicalTerms(text) {
+            let explanations = "";
+
+            for (const term in medicalDictionary) {
+                const regex = new RegExp(`\\b${term}\\b`, "gi");
+                if (text.match(regex)) {
+                    explanations += `<strong>${term}:</strong> ${medicalDictionary[term]}<br>`;
+                }
+            }
+
+            return explanations || "No medical terms recognized.";
+        }
+    </script>
+
+</body>
+
+</html>

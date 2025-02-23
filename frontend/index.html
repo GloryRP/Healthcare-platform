@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Platform</title>
+    <style>
+        /* Page styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #fbe7e8, #d7e9f7);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 40px;
+        }
+
+        .box-container {
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+        }
+
+        .box {
+            width: 300px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+        }
+
+        .user {
+            background: #ff6b6b; /* Red for Users */
+            color: white;
+        }
+
+        .hospital {
+            background: #4a90e2; /* Blue for Hospitals */
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome to the Healthcare Platform</h1>
+
+        <div class="box-container">
+            <!-- User Login Box -->
+            <div class="box user" onclick="location.href='userLogin.html'">
+                <h2>User Login</h2>
+                <p>Access healthcare services and hospital information.</p>
+            </div>
+
+            <!-- Hospital Login Box -->
+            <div class="box hospital" onclick="location.href='hospitallogin.html'">
+                <h2>Hospital Login</h2>
+                <p>Manage OPD, appointments, and hospital details.</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

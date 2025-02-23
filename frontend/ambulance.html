@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance - Medical Service Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Page Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensures full-page height */
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #16146e;
+            color: #d3d9dd;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        /* Navigation Styling */
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content Styling */
+        main {
+            flex: 1; /* Ensures content grows and pushes the footer down */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 80%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Ambulance List Styling */
+        .ambulance-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ambulance-list li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .ambulance-list h3 {
+            margin-top: 0;
+        }
+
+        /* Form Styling */
+        .form-container {
+            margin-top: 20px;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            border: 1px solid #ccc;
+            width: calc(100% - 22px);
+        }
+
+        .form-container button {
+            border: none;
+            background-color: #16146e;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0e0e5a;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #121e4c;
+            color: #2392a1;
+            text-align: center;
+            padding: 10px 0;
+            position: sticky; /* Keeps footer at bottom without covering content */
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Responsive Design for Small Screens */
+        @media (max-width: 768px) {
+            .form-container {
+                margin-bottom: 150px; /* Extra space for better form visibility */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Ambulance Services</h1>
+    </header>
+
+    <main>
+        <!-- Ambulance List Section -->
+        <section id="ambulance-list">
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search for ambulances...">
+            </div>
+            <ul class="ambulance-list" id="ambulanceList">
+                <!-- Example ambulance entries -->
+                <li>
+                    <h3>Ambulance Service A</h3>
+                    <p>Location: Central City</p>
+                    <p>Contact: (123) 456-7890</p>
+                    <p>Available: Yes</p>
+                </li>
+                <li>
+                    <h3>Ambulance Service B</h3>
+                    <p>Location: North District</p>
+                    <p>Contact: (987) 654-3210</p>
+                    <p>Available: No</p>
+                </li>
+                <li>
+                    <h3>Ambulance Service C</h3>
+                    <p>Location: South Town</p>
+                    <p>Contact: (555) 123-4567</p>
+                    <p>Available: Yes</p>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Ambulance Request Form -->
+        <section id="request-ambulance">
+            <h2>Request an Ambulance</h2>
+            <div class="form-container">
+                <form id="requestAmbulanceForm">
+                    <input type="text" id="requestLocation" name="location" placeholder="Pickup Location" required>
+                    <input type="text" id="requestContact" name="contact" placeholder="Contact Number" required>
+                    <textarea id="requestDetails" name="details" placeholder="Details of the Situation" required></textarea>
+                    <button type="submit">Request Ambulance</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Medical Service Portal. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById("requestAmbulanceForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("✅ Ambulance request sent successfully!");
+            window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top after submission
+            this.reset();
+        });
+    </script>
+
+</body>
+
+</html>

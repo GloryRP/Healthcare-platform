@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authentication - Medical Service Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fbe7e8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+        }
+
+        h2 {
+            color: #ff6b6b;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e05a5a;
+        }
+
+        .toggle-btn {
+            background: #4a90e2;
+        }
+
+        #errorMessage {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Toggle between Login and Sign Up -->
+        <button id="toggleForm" class="toggle-btn">Switch to Sign Up</button>
+
+        <!-- User Login Form -->
+        <div id="loginForm">
+            <h2>User Login</h2>
+            <form id="userLoginForm">
+                <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                <button type="submit">Login</button>
+                <p id="loginErrorMessage"></p>
+            </form>
+        </div>
+
+        <!-- User Signup Form -->
+        <div id="signupForm" class="hidden">
+            <h2>User Sign Up</h2>
+            <form id="userSignupForm">
+                <input type="text" id="signupName" placeholder="Enter your name" required>
+                <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                <input type="password" id="signupPassword" placeholder="Create a password" required>
+                <button type="submit">Sign Up</button>
+                <p id="signupErrorMessage"></p>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Toggle between Login and Sign Up forms
+        const toggleButton = document.getElementById('toggleForm');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+
+        toggleButton.addEventListener('click', () => {
+            loginForm.classList.toggle('hidden');
+            signupForm.classList.toggle('hidden');
+            toggleButton.textContent = loginForm.classList.contains('hidden') ? "Switch to Login" : "Switch to Sign Up";
+        });
+
+        // Signup Logic
+        document.getElementById('userSignupForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Capture form data
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            // Save user info in localStorage (temporary storage)
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userPassword', password);
+
+            alert('✅ Signup successful! Switch to Login.');
+            toggleButton.click(); // Switch back to login form
+        });
+
+        // Login Logic
+        document.getElementById('userLoginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Capture login credentials
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Retrieve user info from localStorage
+            const storedEmail = localStorage.getItem('userEmail');
+            const storedPassword = localStorage.getItem('userPassword');
+
+            if (email === storedEmail && password === storedPassword) {
+                alert('✅ User login successful!');
+                window.location.href = 'userDashboard.html';
+            } else {
+                document.getElementById('loginErrorMessage').textContent = '❌ Invalid email or password.';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

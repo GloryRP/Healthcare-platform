@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organ Donor Registration</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #0984e3); /* Soft blue gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 380px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Form Heading */
+        h1 {
+            color: #0984e3;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Input Field Box */
+        .input-box {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        /* Input Fields */
+        input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border: 2px solid #0984e3;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s ease-in-out;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #006bb3;
+            box-shadow: 0px 0px 8px rgba(0, 107, 179, 0.3);
+        }
+
+        /* Icons Inside Input Fields */
+        .input-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0984e3;
+            font-size: 18px;
+        }
+
+        /* Submit Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: #006bb3;
+            transform: scale(1.05);
+        }
+
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h1>🫀 Organ Donor Registration</h1>
+
+        <form id="organDonorForm">
+
+            <div class="input-box">
+                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                <i>👤</i>
+            </div>
+
+            <div class="input-box">
+                <input type="text" id="organType" name="organType" placeholder="Organ Type (e.g. Kidney, Liver)" required>
+                <i>🫁</i>
+            </div>
+
+            <div class="input-box">
+                <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" required>
+                <i>📞</i>
+            </div>
+
+            <div class="input-box">
+                <input type="text" id="location" name="location" placeholder="Location (City, State)" required>
+                <i>📍</i>
+            </div>
+
+            <button type="submit">✅ Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('organDonorForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const organ_type = document.getElementById('organType').value;
+            const contact_number = document.getElementById('contactNumber').value;
+            const location = document.getElementById('location').value;
+
+            const donorData = { name, organ_type, contact_number, location };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/organ-donors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(donorData)
+                });
+
+                if (response.ok) {
+                    alert('✅ Organ donor registered successfully!');
+                    document.getElementById('organDonorForm').reset();
+                } else {
+                    const error = await response.json();
+                    alert('❌ Registration failed: ' + error.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ An error occurred. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+</html>

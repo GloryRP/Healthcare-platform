@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitals - Medical Service Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            text-align: center;
+        }
+
+        header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 900px;
+        }
+
+        .search-container {
+            margin: 20px 0;
+        }
+
+        input[type="text"], select {
+            padding: 10px;
+            width: 40%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .hospital-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .hospital-card h3 {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Hospitals - Medical Service Portal</h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Search and Specialization Filter -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by hospital name" onkeyup="filterHospitals()">
+
+            <select id="specializationSelect" onchange="filterHospitals()">
+                <option value="">Select Specialization</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Orthopedic">Orthopedic</option>
+                <option value="General">General Physician</option>
+            </select>
+        </div>
+
+        <!-- Hospital List -->
+        <div id="hospitalList">
+            <!-- Dynamic hospital data will load here -->
+        </div>
+
+    </div>
+
+    <script>
+        const hospitals = [
+            { id: 1, name: "Green Life Hospital", specialization: ["Cardiology", "Pediatrics"], opdAvailability: "Available", contact: "contact@greenlife.com" },
+            { id: 2, name: "City Care Clinic", specialization: ["Orthopedic", "General"], opdAvailability: "Available", contact: "info@citycare.com" },
+            { id: 3, name: "Healing Touch Hospital", specialization: ["Pediatrics"], opdAvailability: "Not Available", contact: "support@healingtouch.com" }
+        ];
+
+        const hospitalList = document.getElementById('hospitalList');
+
+        function displayHospitals(list) {
+            hospitalList.innerHTML = "";
+            list.forEach(hospital => {
+                const hospitalCard = document.createElement('div');
+                hospitalCard.className = 'hospital-card';
+                hospitalCard.innerHTML = `
+                    <h3>${hospital.name}</h3>
+                    <p><strong>Specialization:</strong> ${hospital.specialization.join(", ")}</p>
+                    <p><strong>OPD Availability:</strong> ${hospital.opdAvailability}</p>
+                    <p><strong>Contact:</strong> ${hospital.contact}</p>
+                    <button onclick="redirectToAppointment()">Book Appointment</button>
+                `;
+                hospitalList.appendChild(hospitalCard);
+            });
+        }
+
+        displayHospitals(hospitals);
+
+        function filterHospitals() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const selectedSpecialization = document.getElementById('specializationSelect').value;
+
+            const filteredHospitals = hospitals.filter(hospital =>
+                hospital.name.toLowerCase().includes(searchValue) &&
+                (selectedSpecialization === "" || hospital.specialization.includes(selectedSpecialization))
+            );
+
+            displayHospitals(filteredHospitals);
+        }
+
+        function redirectToAppointment() {
+            window.location.href = 'Book-appointment.html';
+        }
+    </script>
+
+</body>
+
+</html>

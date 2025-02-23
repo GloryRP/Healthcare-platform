@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Form</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f9f9f9;
+            margin: 20px;
+        }
+        form {
+            width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: hsl(355, 60%, 87%);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(193, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #ea1e3d;
+            text-decoration: underline;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #09098b;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .donor-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .donor-card a {
+            color: #ea1e3d;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blood Donor Registration</h1>
+
+    <!-- Blood Donor Form -->
+    <form id="bloodDonorForm" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="bloodType">Blood Type:</label>
+        <input type="text" id="bloodType" name="bloodType" required>
+
+        <label for="contactNumber">Contact Number:</label>
+        <input type="text" id="contactNumber" name="contactNumber" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="bloodReport">Upload Blood Report (PDF/JPG/PNG):</label>
+        <input type="file" id="bloodReport" name="bloodReport" accept=".pdf,.jpg,.png" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Search Donors -->
+    <h1>Search Blood Donors</h1>
+    <form id="searchForm">
+        <label for="searchBloodType">Blood Type:</label>
+        <input type="text" id="searchBloodType" required>
+
+        <label for="searchLocation">Location:</label>
+        <input type="text" id="searchLocation">
+
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        // Submit Blood Donor Form
+        document.getElementById('bloodDonorForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('http://localhost:3000/api/blood-donors', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('✅ Blood donor added successfully!');
+                    this.reset();
+                } else {
+                    const error = await response.json();
+                    alert('❌ Failed to add donor: ' + error.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ An error occurred. Please try again.');
+            }
+        });
+
+        // Search Blood Donors
+        document.getElementById('searchForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const bloodType = document.getElementById('searchBloodType').value;
+            const location = document.getElementById('searchLocation').value;
+
+            try {
+                const query = new URLSearchParams({
+                    bloodType: bloodType,
+                    location: location
+                });
+
+                const response = await fetch(`http://localhost:3000/api/blood-donors?${query}`);
+                const donors = await response.json();
+
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+
+                if (donors.length === 0) {
+                    resultsDiv.innerHTML = '<p>No matching blood donors found.</p>';
+                    return;
+                }
+
+                donors.forEach(donor => {
+                    if ((donor.blood_type || '').toLowerCase() === bloodType.toLowerCase() &&
+                        (donor.location || '').toLowerCase().includes(location.toLowerCase())) {
+                        resultsDiv.innerHTML += `
+                            <div class="donor-card">
+                                <p><strong>Name:</strong> ${donor.name}</p>
+                                <p><strong>Blood Type:</strong> ${donor.blood_type}</p>
+                                <p><strong>Location:</strong> ${donor.location}</p>
+                                <p><a href="/uploads/${donor.bloodReport}" target="_blank">View Blood Report</a></p>
+                            </div>
+                        `;
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ An error occurred while searching.');
+            }
+        });
+    </script>
+</body>
+</html>

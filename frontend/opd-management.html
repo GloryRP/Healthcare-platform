@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage OPD Services</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            margin: 25px;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            width: 900px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: #1565c0;
+            font-size: 24px;
+        }
+
+        input {
+            width: 92%;
+            padding: 12px;
+            border: 2px solid #1565c0;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 15px; /* Added margin to push the button down */
+        }
+
+        input:focus {
+            border-color: #0d47a1;
+            box-shadow: 0px 0px 8px rgba(13, 71, 161, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 6px;
+            background: #1565c0;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d47a1;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        li {
+            background: #e3f2fd;
+            padding: 12px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 6px;
+            border-left: 5px solid #1565c0;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #f44336;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="box" id="opd-management">
+        <h2>🩺 Manage OPD Services</h2>
+
+        <!-- Add New OPD Service Form -->
+        <form id="addOpdForm">
+            <input type="text" id="opdServiceName" placeholder="Enter OPD Service" required>
+            <button type="submit">➕ Add OPD Service</button>
+        </form>
+
+        <!-- List of OPD Services -->
+        <ul id="opdList"></ul>
+    </section>
+
+    <script>
+        const opdForm = document.getElementById("addOpdForm");
+        const opdList = document.getElementById("opdList");
+
+        // Set your hospital ID here (Make it dynamic if needed)
+        const hospitalId = 1;
+
+        // ➤ Fetch OPD Services
+        async function fetchOpdServices() {
+            try {
+                const response = await fetch("http://localhost:3000/api/opd-services");
+                if (!response.ok) throw new Error("Failed to fetch OPD services");
+
+                const services = await response.json();
+                opdList.innerHTML = "";
+
+                services.forEach(service => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <span>${service.service_name} - <strong>${service.available ? "✅ Available" : "❌ Not Available"}</strong></span>
+                        <button class="delete-btn" onclick="deleteOpdService(${service.id})">🗑️</button>
+                    `;
+                    opdList.appendChild(li);
+                });
+            } catch (error) {
+                console.error("Error fetching OPD services:", error);
+                alert("❌ Unable to load OPD services. Check the console for details.");
+            }
+        }
+
+        // ➤ Add OPD Service
+        opdForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const serviceName = document.getElementById("opdServiceName").value;
+
+            try {
+                const response = await fetch("http://localhost:3000/api/opd-services", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ hospital_id: hospitalId, service_name: serviceName, available: true }),
+                });
+
+                if (!response.ok) throw new Error("Failed to add OPD service");
+
+                alert("✅ OPD Service added successfully!");
+                opdForm.reset();
+                fetchOpdServices();
+            } catch (error) {
+                console.error("Error adding OPD service:", error);
+                alert("❌ Failed to add OPD service. Check the console for details.");
+            }
+        });
+
+        // ➤ Delete OPD Service
+        async function deleteOpdService(id) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/opd-services/${id}`, {
+                    method: "DELETE",
+                });
+
+                if (!response.ok) throw new Error("Failed to delete OPD service");
+
+                alert("✅ OPD Service deleted successfully!");
+                fetchOpdServices();
+            } catch (error) {
+                console.error("Error deleting OPD service:", error);
+                alert("❌ Failed to delete OPD service. Check the console for details.");
+            }
+        }
+
+        // Fetch OPD services on page load
+        fetchOpdServices();
+    </script>
+
+</body>
+
+</html>
